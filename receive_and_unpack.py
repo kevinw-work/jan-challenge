@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import pika, sys, os, send, s3operations, io
+import pika, sys, os, send, s3operations, miniooperations, io
 
 def main():
     # connection = pika.BlockingConnection(pika.ConnectionParameters(host="localhost"))
@@ -9,7 +9,7 @@ def main():
     channel.queue_declare(queue='unpacker-queue')
 
     def callback(ch, method, properties, body):
-        content = s3operations.read_object_from_bucket('input', 'Birthday2021.txt')
+        content = miniooperations.read_object_from_bucket('input', 'Birthday2021.txt')
         print(' [*] Read from bucket ', content.len)
         unpacked_content = unpack(content)
         print(' [*] Unpacked content ', unpacked_content.len)
@@ -32,7 +32,7 @@ def unpack(body):
 
 def upload_unpacked_content(unpacked_content):
     # Upload to S3
-    s3operations.upload_to_bucket('NewObject', 'unpacked', io.StringIO(unpacked_content))
+    miniooperations.upload_to_bucket('NewObject', 'unpacked', io.StringIO(unpacked_content))
 
 def create_notification(properties):
     # Create notification for formatter
