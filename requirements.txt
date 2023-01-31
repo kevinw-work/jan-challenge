@@ -1,3 +1,4 @@
 pika
 boto3
 minio
+uuid

@@ -4,14 +4,11 @@ from boto3.s3.transfer import TransferConfig
 
 
 def s3_client():
-    # s3 = boto3.client('s3',
-    # endpoint_url='https://c100-e.eu-gb.containers.cloud.ibm.com:30128',
-    # aws_access_key_id='rpmoUwytb603LZN8',
-    # aws_secret_access_key='c2UBIB8kGOJQcbjRQCYnw8tnXsVODUz2',
-    # aws_session_token=None,
-    # config=boto3.session.Config(signature_version='s3v4'),
-    # verify=False)
-    s3 = boto3.client('s3')
+    s3 = boto3.client('s3',
+    endpoint_url='http://minio-service.kevin-w.svc.cluster.local:9000',
+    aws_access_key_id='b6J4Q7OXiGQZrCvp',
+    aws_secret_access_key='CfQDpLK0xaKqZAsp2j1SAjKyBVEoal0F',
+    verify=False)
     """ :type : pyboto3.s3 """
     return s3
 
