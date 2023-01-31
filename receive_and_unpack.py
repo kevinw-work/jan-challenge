@@ -15,13 +15,13 @@ def main():
 
         content = s3operations.read_object_from_bucket(key, bucket)
 
-        (unpacked_content, unpacked_filename) = unpack(content)
+        (unpacked_content, unpacked_filename) = unpack(content['Body'].read())
         print(' [*] Unpacked content ', unpacked_content)
 
         key = upload_unpacked_content(unpacked_content)
         print(' [*] Uploaded to bucket')
 
-        notification_message = create_notification(body, unpacked_filename, key)
+        notification_message = create_notification(body_json, unpacked_filename, key)
         send.send(pika.BasicProperties(), notification_message)
 
         print(' [*] Sent notification')
@@ -35,7 +35,7 @@ def main():
 
 def unpack(content):
     # Unzip the File
-    zip = zipfile.ZipFile(BytesIO(content))
+    zip = zipfile.ZipFile(io.BytesIO(content))
     zip_info = zip.infolist()
     # Just get the first file in the zip
     with zip.open(zip_info[0], 'r') as unzipped_file:
@@ -43,15 +43,15 @@ def unpack(content):
 
 def upload_unpacked_content(unpacked_content):
     # Upload to S3
-    key = uuid.uuid4()
-    s3operations.upload_to_bucket(key, 'unpacked', io.BytesIO(bytearray(unpacked_content, 'utf-8')))
+    key = str(uuid.uuid4())
+    s3operations.upload_to_bucket(key, 'unpacked', io.BytesIO(unpacked_content))
     return key
 
-def create_notification(body, unpacked_filename, key):
+def create_notification(body_json, unpacked_filename, key):
     # Add to notification for formatter
     new_notifiction = {"unpacker": {"unpacked_filename": unpacked_filename, "bucket": "unpacked", "key": key}}
-    body["Records"].append(new_notifiction)
-    return json.dumps(body, indent=2)
+    body_json["Records"].append(new_notifiction)
+    return json.dumps(body_json, indent=2)
 
 
 
