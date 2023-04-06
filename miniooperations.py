@@ -1,5 +1,7 @@
 from minio import Minio, credentials
 
+# NOT USED - COULD NOT MAKE IT WORK, USED s3operations INSTEAD
+
 def minio_client():
     # client = Minio(
     # endpoint='minio-kevin-w.flows-dev-cluster-7c309b11fc78649918d0c8b91bcb5925-0000.eu-gb.containers.appdomain.cloud',

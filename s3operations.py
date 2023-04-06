@@ -6,6 +6,7 @@ from boto3.s3.transfer import TransferConfig
 def s3_client():
     s3 = boto3.client('s3',
     endpoint_url='http://minio-service.kevin-w.svc.cluster.local:9000',
+#    endpoint_url='http://minio-kevin-w.flows-dev-cluster-7c309b11fc78649918d0c8b91bcb5925-0000.eu-gb.containers.appdomain.cloud',
     aws_access_key_id='b6J4Q7OXiGQZrCvp',
     aws_secret_access_key='CfQDpLK0xaKqZAsp2j1SAjKyBVEoal0F',
     verify=False)
